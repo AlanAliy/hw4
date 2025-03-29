@@ -1,4 +1,6 @@
 #ifndef RECCHECK
+#include <algorithm>
+
 //if you want to add any #includes like <iostream> you must do them here (before the next endif)
 
 #endif
@@ -7,12 +9,50 @@
 using namespace std;
 
 
-// You may add any prototypes of helper functions here
+//You may add any prototypes of helper functions here
+
+bool hasKids(Node* root) {
+    if ((root->right != nullptr) || (root->left != nullptr)) {
+        return true;
+    }
+    return false;
+}
+
+
+// int find_height(Node* root) {
+//     if (root == nullptr) {
+//         return 0;
+//     }
+//     else{
+//         return 1 + max(find_height(root->left), find_height(root->right));
+//     }
+    
+// } 
+
+
+bool equalPathHelper(Node* root, int currentDepth, int& leafDepth) {
+    if (root == nullptr) {return true;}
+
+    else if (!hasKids(root)) {
+        if (leafDepth == -1) {
+            leafDepth = currentDepth;
+            return true;
+        }
+        return (leafDepth == currentDepth);
+    }
+
+    bool left_check = equalPathHelper(root->left, currentDepth+1, leafDepth);
+    bool right_check = equalPathHelper(root->right, currentDepth+1, leafDepth);
+
+    return (left_check && right_check);
+}
+
 
 
 bool equalPaths(Node * root)
 {
-    // Add your code below
+    int leaf_depth = -1;
+    return equalPathHelper(root, 0, leaf_depth);
 
 }
 
