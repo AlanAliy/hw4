@@ -201,6 +201,7 @@ public:
     bool isBalanced() const; //TODO
     void print() const;
     bool empty() const;
+    
 
     template<typename PPKey, typename PPValue>
     friend void prettyPrintBST(BinarySearchTree<PPKey, PPValue> & tree);
@@ -245,6 +246,7 @@ protected:
     // Provided helper functions
     virtual void printRoot (Node<Key, Value> *r) const;
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
+    int16_t getHeight(Node<Key, Value>* root) const;
 
     // Add helper functions here
 
@@ -267,6 +269,7 @@ template<class Key, class Value>
 BinarySearchTree<Key, Value>::iterator::iterator(Node<Key,Value> *ptr)
 {
     // TODO
+    current_ = ptr;
 }
 
 /**
@@ -275,7 +278,7 @@ BinarySearchTree<Key, Value>::iterator::iterator(Node<Key,Value> *ptr)
 template<class Key, class Value>
 BinarySearchTree<Key, Value>::iterator::iterator() 
 {
-    // TODO
+    current_ = nullptr;
 
 }
 
@@ -308,7 +311,7 @@ bool
 BinarySearchTree<Key, Value>::iterator::operator==(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
-    // TODO
+    return this->current_ == rhs.current_;
 }
 
 /**
@@ -320,7 +323,7 @@ bool
 BinarySearchTree<Key, Value>::iterator::operator!=(
     const BinarySearchTree<Key, Value>::iterator& rhs) const
 {
-    // TODO
+    return this->current_ != rhs.current_;
 
 }
 
@@ -332,7 +335,26 @@ template<class Key, class Value>
 typename BinarySearchTree<Key, Value>::iterator&
 BinarySearchTree<Key, Value>::iterator::operator++()
 {
-    // TODO
+    if (current_ == nullptr) {
+        return *this;
+    }
+
+    else if (current_->getRight() != nullptr) { //if a right child exists, I should go to the leftmost right example
+        current_ = current_->getRight();
+        while(current_->getLeft() != nullptr) {
+            current_ = current_->getLeft();
+        }
+    }
+
+    else {  
+        Node<Key, Value> *prnt = current_->getParent(); ///if no right chile I go up until I am a left parent
+        while((prnt != nullptr) && (prnt->getLeft() != current_)) {
+            current_ = prnt;
+            prnt = prnt->getParent();
+        }
+        current_ = prnt;
+    }
+    return *this;
 
 }
 
@@ -355,7 +377,7 @@ Begin implementations for the BinarySearchTree class.
 template<class Key, class Value>
 BinarySearchTree<Key, Value>::BinarySearchTree() 
 {
-    // TODO
+    root_ = nullptr;
 }
 
 template<typename Key, typename Value>
@@ -420,6 +442,9 @@ BinarySearchTree<Key, Value>::find(const Key & k) const
  * @precondition The key exists in the map
  * Returns the value associated with the key
  */
+
+
+
 template<class Key, class Value>
 Value& BinarySearchTree<Key, Value>::operator[](const Key& key)
 {
@@ -487,7 +512,11 @@ template<typename Key, typename Value>
 Node<Key, Value>*
 BinarySearchTree<Key, Value>::getSmallestNode() const
 {
-    // TODO
+    Node<Key, Value>* current = root_;
+    while(temp->getLeft() != nullptr) {
+        temp = temp->getLeft();
+    }
+    return temp;
 }
 
 /**
@@ -498,17 +527,54 @@ BinarySearchTree<Key, Value>::getSmallestNode() const
 template<typename Key, typename Value>
 Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) const
 {
-    // TODO
+    Node<Key, Value>* current= root_;
+    while (current != nullptr) {
+        if (current->getKey() == key) {return current;}
+        else if (current->getKey() > key) {current = current->getLeft();}
+        else if (current->getKey() < key) {current = current->getRight();}
+    }
 }
+
+
+
+
+
+/**
+ * Get Height of BST
+ */
+
+template<typename Key, typename Value>
+int16_t BinarySearchTree<Key, Value>::getHeight(Node<Key, Value>* root) const {
+    if (root == nullptr) {
+        return 0;
+    }
+    else {
+       uint16_t h_left = getHeight(root->getLeft());
+       uint16_t h_right = getHeight(root->getRight());
+
+       if (abs(h_left - h_right) > 1) {
+            return -1;
+       }
+       
+       return 1 + max(h_left, h_right);
+    }
+}
+
+
 
 /**
  * Return true iff the BST is balanced.
  */
+
+
 template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
-    // TODO
+    return !(getHeight(root_) == -1);
+
 }
+
+
 
 
 
