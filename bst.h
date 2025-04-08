@@ -631,8 +631,8 @@ int16_t BinarySearchTree<Key, Value>::getHeight(Node<Key, Value>* root_) const {
         return 0;
     }
     else {
-       uint16_t h_left = getHeight(root_->getLeft());
-       uint16_t h_right = getHeight(root_->getRight());
+       int16_t h_left = getHeight(root_->getLeft());
+       int16_t h_right = getHeight(root_->getRight());
 
        if (abs(h_left - h_right) > 1) {
             return -1;

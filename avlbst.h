@@ -55,7 +55,7 @@ protected:
 
 template<class Key, class Value>
 int16_t AVLNode<Key, Value>::findBalance() const{
-    if (this == nullptr) {return 0}
+    if (this == nullptr) {return 0;}
     int16_t leftH = getHeight(this->getLeft());
     int16_t rightH = getHeight(this->getRight());
 
@@ -219,9 +219,7 @@ AVLNode<Key, Value>* AVLTree<Key, Value>::rotateRight(AVLNode<Key, Value>* node)
     if (nodeP != nullptr) {
         nodeP->setBalance(nodeP->findBalance());
     }
-    else {
-        nodeP->setBalance(0);
-    }
+
 
     return nodeL;
 }
@@ -258,9 +256,6 @@ AVLNode<Key, Value>* AVLTree<Key, Value>::rotateLeft(AVLNode<Key, Value>* node) 
     if (nodeP != nullptr) {
         nodeP->setBalance(nodeP->findBalance());
     }
-    else {
-        nodeP->setBalance(0);
-    }
 
     return nodeR;
 
@@ -280,7 +275,7 @@ AVLNode<Key, Value>* AVLTree<Key,Value>::rebalance(AVLNode<Key, Value>* node) {
         return rotateRight(node);
     }
 
-    if(balance > 1) {
+    if(balance < -1) {
         if (node->getRight()->getBalance() > 0) {
             node->setRight(rotateRight(node->getRight()));
         }
