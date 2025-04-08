@@ -41,10 +41,14 @@ bool equalPathHelper(Node* root, int currentDepth, int& leafDepth) {
         return (leafDepth == currentDepth);
     }
 
-    bool left_check = equalPathHelper(root->left, currentDepth+1, leafDepth);
-    bool right_check = equalPathHelper(root->right, currentDepth+1, leafDepth);
-
-    return (left_check && right_check);
+    bool ok = true;
+    if (root->left) {
+        ok = ok && equalPathHelper(root->left, currentDepth + 1, leafDepth);
+    }
+    if (root->right) {
+        ok = ok && equalPathHelper(root->right, currentDepth + 1, leafDepth);
+    }
+    return ok;
 }
 
 

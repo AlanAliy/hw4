@@ -248,7 +248,7 @@ protected:
     // Provided helper functions
     virtual void printRoot (Node<Key, Value> *r) const;
     virtual void nodeSwap( Node<Key,Value>* n1, Node<Key,Value>* n2) ;
-    int16_t getHeight(Node<Key, Value>* root) const;
+    int16_t getHeight(Node<Key, Value>* node) const;
 
     // Add helper functions here
 
@@ -626,16 +626,19 @@ Node<Key, Value>* BinarySearchTree<Key, Value>::internalFind(const Key& key) con
  */
 
 template<typename Key, typename Value>
-int16_t BinarySearchTree<Key, Value>::getHeight(Node<Key, Value>* root_) const {
-    if (root_ == nullptr) {
+int16_t BinarySearchTree<Key, Value>::getHeight(Node<Key, Value>* node) const {
+    if (node == nullptr) {
         return 0;
     }
     else {
-       int16_t h_left = getHeight(root_->getLeft());
-       int16_t h_right = getHeight(root_->getRight());
+       int16_t h_left = getHeight(node->getLeft());
+       int16_t h_right = getHeight(node->getRight());
 
-       if (abs(h_left - h_right) > 1) {
-            return -1;
+      if ((h_left == -1) || (h_right == -1)) {
+        return -1;
+      }
+      if (abs(h_left - h_right) > 1) {
+          return -1;
        }
        
        return 1 + std::max(h_left, h_right);
@@ -652,7 +655,7 @@ int16_t BinarySearchTree<Key, Value>::getHeight(Node<Key, Value>* root_) const {
 template<typename Key, typename Value>
 bool BinarySearchTree<Key, Value>::isBalanced() const
 {
-    return !(getHeight(root_) == -1);
+    return !(getHeight(this->root_) == -1);
 
 }
 
