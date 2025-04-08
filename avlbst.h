@@ -55,7 +55,8 @@ protected:
 
 template<class Key, class Value>
 int16_t AVLNode<Key, Value>::findBalance() const{
-    if (this == nullptr) {return 0;}
+  auto* tester = this;
+    if (tester == nullptr) {return 0;}
     int16_t leftH = getHeight(this->getLeft());
     int16_t rightH = getHeight(this->getRight());
 
